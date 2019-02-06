@@ -4,6 +4,7 @@
   "description": "Simple tic-tac-toe in Vanilla JS",
   "main": "index.html",
   "scripts": {
+    "start": "parcel index.html",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "fcaplette",

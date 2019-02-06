@@ -14,3 +14,7 @@ export function getBoxPosition(box) {
   }
   return position;
 }
+
+export function isBoxEmpty(box) {
+  return box === null;
+}

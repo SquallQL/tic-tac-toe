@@ -5,12 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="./src/index.css" />
-    <title>Tic Tac toe</title>
+    <title>Tic Tac Toe</title>
   </head>
   <body>
     <div id="root">
-      <h1 id="gameStatus">Playing</h1>
-      <h2 id="playerTurnText"></h2>
+      <h1>Tic-Tac-Toe</h1>
+      <h2 id="gameStatus">Round <span id="roundNumber">1</span></h2>
+      <div class="scoreContainer">
+      <div id="xSection"><span id="xTurn" class="isActiveTurn activeRight"></span>X : <span id="xScore">0</span></div>
+      <button id="resetBtn" class="btnDisabled">Restart</button>
+      <div id="oSection"><span id="oTurn"></span>O : <span id="oScore">0</span></div>
+    </div>
+    <div id="gameBoard">
       <div class="row">
         <div id="0" class="box"></div>
         <div id="1" class="box boxMiddle"></div>
@@ -26,6 +32,7 @@
         <div id="7" class="box boxMiddle"></div>
         <div id="8" class="box"></div>
       </div>
+    </div>
     </div>
     <script src="src/index.js"></script>
   </body>

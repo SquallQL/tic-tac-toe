@@ -1,8 +1,12 @@
 body {
   display: flex;
   justify-content: center;
+  align-items: center;
 
-  margin-top: 50px;
+  color: #ffffff;
+  font-family: monospace;
+
+  background-color: #3b3b3b;
 }
 
 h1,
@@ -11,24 +15,44 @@ h2 {
 }
 
 #root {
+  padding: 12px;
+}
+
+#gameBoard {
   height: 500px;
   width: 500px;
 }
 
 #mainRow {
-  border-bottom: 1px solid black;
-  border-top: 1px solid black;
+  border-bottom: 2px solid #ffffff;
+  border-top: 2px solid #ffffff;
+}
+
+#xSection,
+#oSection {
+  position: relative;
+}
+
+.scoreContainer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  margin-bottom: 24px;
+
+  font-size: 20px;
 }
 
 .boxMiddle {
-  border-left: 1px solid black;
-  border-right: 1px solid black;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #ffffff;
 }
 
 .row {
   display: flex;
   justify-content: center;
 
+  max-height: 33%;
   height: 33%;
   width: 100%;
 }
@@ -38,7 +62,60 @@ h2 {
   justify-content: center;
   align-items: center;
 
-  height: 100%;
   width: 33%;
-  font-size: 50px;
+  font-size: 55px;
+
+  user-select: none;
+  cursor: pointer;
+}
+
+.blueSymbol {
+  color: #71ddff;
+}
+
+.redSymbol {
+  color: #ff7878;
+}
+
+.isActiveTurn {
+  position: absolute;
+  /* TODO: center absolute element without harcoded value */
+  top: 5px;
+  display: inline-block;
+
+  width: 15px;
+  height: 15px;
+
+  background-color: #99eb82;
+  border-radius: 50%;
+}
+
+.activeLeft {
+  /* TODO: Find a better way to position on the left */
+  left: 75px;
+}
+
+.activeRight {
+  /* TODO: Find a better way to position on the right */
+  right: 75px;
+}
+
+#resetBtn {
+  color: inherit;
+  text-decoration: underline;
+
+  border: none;
+  background-color: transparent;
+  box-shadow: none;
+
+  cursor: pointer;
+}
+
+.btnDisabled {
+  pointer-events: none;
+  opacity: 0.25;
+}
+
+.isHidden {
+  opacity: 0;
 }
