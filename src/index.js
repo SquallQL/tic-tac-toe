@@ -63,9 +63,16 @@ export function boxClick() {
 }
 
 export function reset() {
+  const elts = findElements();
+
   xTurn = true;
   gridValues = [[null, null, null], [null, null, null], [null, null, null]];
-  resetDOM();
+  resetDOM(elts);
+  // Reset the turn status to X
+  changeTurn(elts, true);
+
+  // Restart the game
+  run();
 }
 
 run();

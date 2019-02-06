@@ -21,6 +21,7 @@ export function playSymbol(box) {
   box.innerHTML = xTurn ? "X" : "O";
   // TODO: Add class instead instead of removing.
   box.style.color = xTurn ? "#71ddff" : "#ff7878";
+  box.style.cursor = "auto";
 }
 
 export function previewSymbol() {
@@ -47,13 +48,15 @@ export function displayVictory(elts) {
   elts.roundNumber.setAttribute("class", "isHidden");
 
   activateResetBtn(elts);
+  removePointerCursor(elts);
 }
 
 export function displayDraw(elts) {
   elts.gameStatusElt.innerHTML = `DRAW`;
-  elts.xScoreElt.innerHTML = "<button id='restart'>Restart</button>";
+  elts.roundNumber.setAttribute("class", "isHidden");
 
   activateResetBtn(elts);
+  removePointerCursor(elts);
 }
 
 export function activateResetBtn(elts) {
@@ -72,9 +75,7 @@ export function changeTurn(elts) {
   }
 }
 
-export function resetDOM() {
-  const elts = findElements();
-
+export function resetDOM(elts) {
   // Increment the round count by 1
   let round = Number(elts.roundNumber.innerHTML) + 1;
   elts.roundNumber.innerHTML = round;
@@ -89,11 +90,12 @@ export function resetDOM() {
   elts.boxes.forEach(box => {
     box.innerHTML = "";
     box.style.color = "";
+    box.style.cursor = "";
   });
+}
 
-  // Reset the turn status to X
-  changeTurn(elts, true);
-
-  // Start the new game
-  run();
+export function removePointerCursor(elts) {
+  elts.boxes.forEach(box => {
+    box.style.cursor = "auto";
+  });
 }
