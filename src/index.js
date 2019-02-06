@@ -16,8 +16,12 @@ import { getBoxPosition, isBoxEmpty } from "./util/utils";
 import { isGameWon, isGridFull } from "./util/victoryUtils";
 
 // TODO: Handle Global state privately
-let gridValues = [[null, null, null], [null, null, null], [null, null, null]];
-let xTurn = true;
+export let gridValues = [
+  [null, null, null],
+  [null, null, null],
+  [null, null, null]
+];
+export let xTurn = true;
 
 // Call after the onload event from the dom to start the program
 export function run() {
@@ -34,16 +38,16 @@ export function boxClick() {
 
   if (isBoxEmpty(currentBox)) {
     if (xTurn) {
-      playSymbol(this, xTurn);
+      playSymbol(this);
       gridValues[row][col] = "X";
     } else {
-      playSymbol(this, xTurn);
+      playSymbol(this);
       gridValues[row][col] = "O";
     }
 
     // If the game is over, we want to display the victory conditions
     if (isGameWon(gridValues)) {
-      displayVictory(elts, xTurn);
+      displayVictory(elts);
       removeBoxesListeners(elts);
     } else if (isGridFull(gridValues)) {
       displayDraw(elts);
@@ -53,15 +57,15 @@ export function boxClick() {
     else {
       removeBoxListener(this);
       xTurn = !xTurn;
-      changeTurn(elts, xTurn);
+      changeTurn(elts);
     }
   }
 }
 
-export function reset(boxClick) {
+export function reset() {
   xTurn = true;
   gridValues = [[null, null, null], [null, null, null], [null, null, null]];
-  resetDOM(elts, boxClick);
+  resetDOM();
 }
 
 run();

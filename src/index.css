@@ -65,16 +65,11 @@ h2 {
   width: 33%;
   font-size: 55px;
 
+  /* Color by default is the preview symbol color */
+  color: rgba(255, 255, 255, 0.2);
+
   user-select: none;
   cursor: pointer;
-}
-
-.blueSymbol {
-  color: #71ddff;
-}
-
-.redSymbol {
-  color: #ff7878;
 }
 
 .isActiveTurn {
