@@ -5,7 +5,8 @@ import {
   displayVictory,
   displayDraw,
   changeTurn,
-  resetDOM
+  resetDOM,
+  hideGameOverModal
 } from "./util/domUtils";
 import {
   addBoxesListeners,
@@ -67,6 +68,7 @@ export function reset() {
 
   xTurn = true;
   gridValues = [[null, null, null], [null, null, null], [null, null, null]];
+  hideGameOverModal();
   resetDOM(elts);
   // Reset the turn status to X
   changeTurn(elts, true);

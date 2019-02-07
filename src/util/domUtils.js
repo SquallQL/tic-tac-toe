@@ -26,43 +26,58 @@ export function playSymbol(box) {
 
 export function previewSymbol() {
   this.innerHTML = xTurn ? "X" : "O";
+  this.style.color = "rgba(255, 255, 255, 0.2)";
 }
 
 export function hidePreviewSymbol() {
-  this.innerHTML = "";
-  this.style.opacity = "1";
+  this.style.color = "rgba(255, 255, 255, 0)";
 }
 
 export function displayVictory(elts) {
   if (xTurn) {
-    elts.gameStatusElt.innerHTML = "The X has claimed victory!";
-
     let currentScore = Number(elts.xScoreElt.innerHTML);
     elts.xScoreElt.innerHTML = currentScore += 1;
   } else {
-    elts.gameStatusElt.innerHTML = "The O has claimed victory!";
-
     let currentScore = Number(elts.oScoreElt.innerHTML);
     elts.oScoreElt.innerHTML = currentScore += 1;
   }
-  elts.roundNumber.setAttribute("class", "isHidden");
 
-  activateResetBtn(elts);
+  const message = `The ${xTurn ? "X" : "O"} has claimed victory!`;
+
   removePointerCursor(elts);
+  showGameOverModal(message);
 }
 
 export function displayDraw(elts) {
-  elts.gameStatusElt.innerHTML = `DRAW`;
-  elts.roundNumber.setAttribute("class", "isHidden");
-
-  activateResetBtn(elts);
   removePointerCursor(elts);
+  showGameOverModal("DRAW");
 }
 
-export function activateResetBtn(elts) {
-  elts.resetBtn.setAttribute("class", "");
+export function showGameOverModal(message) {
+  const root = document.querySelector("#root");
+  const takeOverNode = document.createElement("div");
+  const modalNode = document.createElement("div");
+  const restartNode = document.createElement("button");
 
-  addResetBtnListeners(elts);
+  takeOverNode.setAttribute("id", "gameOver");
+  modalNode.setAttribute("class", "modal");
+  restartNode.setAttribute("id", "resetBtn");
+
+  modalNode.innerHTML = message;
+  restartNode.innerHTML = "Restart";
+
+  root.appendChild(takeOverNode);
+  takeOverNode.appendChild(modalNode);
+  takeOverNode.style.opacity = "1";
+  modalNode.appendChild(restartNode);
+
+  addResetBtnListeners(restartNode);
+}
+
+export function hideGameOverModal() {
+  const root = document.querySelector("#root");
+  const takeOver = document.querySelector("#gameOver");
+  root.removeChild(takeOver);
 }
 
 export function changeTurn(elts) {
@@ -83,7 +98,6 @@ export function resetDOM(elts) {
   elts.gameStatusElt.innerHTML = "Round ";
 
   // Disable the reset button
-  elts.resetBtn.setAttribute("class", "btnDisabled");
   removeResetBtnListeners(elts);
 
   // Reset the HTML grid and style

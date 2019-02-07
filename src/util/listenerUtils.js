@@ -26,8 +26,8 @@ export function removeBoxListener(box) {
   box.removeEventListener("mouseout", hidePreviewSymbol, false);
 }
 
-export function addResetBtnListeners(elts) {
-  elts.resetBtn.addEventListener("click", reset, false);
+export function addResetBtnListeners(resetBtn) {
+  resetBtn.addEventListener("click", reset, false);
 }
 
 export function removeResetBtnListeners(elts) {
