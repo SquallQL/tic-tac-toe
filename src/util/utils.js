@@ -15,6 +15,17 @@ export function getBoxPosition(box) {
   return position;
 }
 
+export function getBoxDOMIndex(row, col) {
+  // Check in which sub-array it belongs
+  if (row === 0) {
+    return row + col;
+  } else if (row === 1) {
+    return 3 + col;
+  } else {
+    return 6 + col;
+  }
+}
+
 export function isBoxEmpty(box) {
   return box === null;
 }

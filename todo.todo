@@ -1,0 +1,23 @@
+
+✔ Add both player name and their symbol (x | o) @done(2019-02-04 16:37)
+✔ Make a circle move next to the name of the player whose turn it is @done(2019-02-04 17:13)
+✔ Keep track of the score (# of game won per player) @done(2019-02-04 16:37)
+✔ Remove listener when game is over @done(2019-02-04 17:18)
+✔ Remove highlights of X and O @done(2019-02-07 07:03)
+✔ Add restart button in DOM @done(2019-02-05 07:53)
+✔ Count the round @done(2019-02-05 16:38)
+✔ Clean up code to be modular @done(2019-02-05 17:05)
+✔ Different colors for X and O (blue and red) @done(2019-02-05 16:48)
+✔ Add class color instead of reseting (setAttribute => addAttribute?) @done(2019-02-07 07:03)
+✔ Mouse over effect on grid (preview your symbol if the case is empty) @done(2019-02-07 07:03)
+✔ Export colors as constants @done(2019-02-07 07:09)
+✔ Add Game over banner animated @done(2019-02-07 19:41)
+✔ Add banner color @done(2019-02-07 08:07)
+✔ Text scale down and opacity 0 => 1 @done(2019-02-07 13:56)
+☐ Change px to em
+✔ Add Player 1 and Computer label @done(2019-02-07 19:59)
+☐ Alternate who goes first
+☐ Create a getter for state variable like grid values and playerTurn
+✔ Make grid smaller on mobile and more space at the top @done(2019-02-07 16:03)
+☐ Add option to play against computer in menu
+✔ Adapt for mobile @done(2019-02-07 07:03)

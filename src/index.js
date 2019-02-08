@@ -1,4 +1,4 @@
-import { determineNextMove } from "./AI/decision";
+import { playAI } from "./AI/decision";
 
 import {
   findElements,
@@ -61,6 +61,10 @@ export function boxClick() {
     removeBoxListener(this);
     isXTurn = !isXTurn;
     changeTurn(elts);
+
+    playAI();
+    // isXTurn = !isXTurn;
+    // changeTurn(elts);
   }
 }
 
