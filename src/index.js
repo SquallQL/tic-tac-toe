@@ -1,4 +1,5 @@
-import { xTurnTxt } from "./text";
+import { determineNextMove } from "./AI/decision";
+
 import {
   findElements,
   playSymbol,
@@ -22,7 +23,7 @@ export let gridValues = [
   [null, null, null],
   [null, null, null]
 ];
-export let xTurn = true;
+export let isXTurn = true;
 
 // Call after the onload event from the dom to start the program
 export function run() {
@@ -38,35 +39,35 @@ export function boxClick() {
   const currentBox = gridValues[row][col];
 
   if (isBoxEmpty(currentBox)) {
-    if (xTurn) {
+    if (isXTurn) {
       playSymbol(this);
       gridValues[row][col] = "X";
     } else {
       playSymbol(this);
       gridValues[row][col] = "O";
     }
+  }
 
-    // If the game is over, we want to display the victory conditions
-    if (isGameWon(gridValues)) {
-      displayVictory(elts);
-      removeBoxesListeners(elts);
-    } else if (isGridFull(gridValues)) {
-      displayDraw(elts);
-      removeBoxesListeners(elts);
-    }
-    // If it is not a victory, then prepare the next turn
-    else {
-      removeBoxListener(this);
-      xTurn = !xTurn;
-      changeTurn(elts);
-    }
+  // If the game is over, we want to display the victory conditions
+  if (isGameWon(gridValues)) {
+    displayVictory(elts);
+    removeBoxesListeners(elts);
+  } else if (isGridFull(gridValues)) {
+    displayDraw(elts);
+    removeBoxesListeners(elts);
+  }
+  // If it is not a victory, then prepare the next turn
+  else {
+    removeBoxListener(this);
+    isXTurn = !isXTurn;
+    changeTurn(elts);
   }
 }
 
 export function reset() {
   const elts = findElements();
 
-  xTurn = true;
+  isXTurn = true;
   gridValues = [[null, null, null], [null, null, null], [null, null, null]];
   hideGameOverModal();
   resetDOM(elts);
