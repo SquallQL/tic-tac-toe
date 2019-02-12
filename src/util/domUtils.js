@@ -7,7 +7,7 @@ import {
   hiddenColor,
   fadeOutBackground
 } from "../settings/colorConstants";
-import { run, reset, isXTurn } from "../index";
+import { run, reset, isPlayerTurn } from "../index";
 import { isBoxEmpty, updateGrid } from "./utils";
 import { addResetBtnListeners, removeResetBtnListeners } from "./listenerUtils";
 
@@ -16,7 +16,7 @@ export function findElements() {
   elts.row = document.querySelectorAll(".row");
   elts.boxes = document.querySelectorAll(".box");
   elts.xScoreElt = document.querySelector("#xScore");
-  elts.isXTurnElt = document.querySelector("#isXTurn");
+  elts.isPlayerTurnElt = document.querySelector("#isPlayerTurn");
   elts.oScoreElt = document.querySelector("#oScore");
   elts.oTurnElt = document.querySelector("#oTurn");
   elts.resetBtn = document.querySelector("#resetBtn");
@@ -26,13 +26,13 @@ export function findElements() {
 }
 
 export function playSymbol(box) {
-  box.innerHTML = isXTurn ? "X" : "O";
-  box.style.color = isXTurn ? xColor : oColor;
+  box.innerHTML = isPlayerTurn ? "X" : "O";
+  box.style.color = isPlayerTurn ? xColor : oColor;
   box.style.cursor = "auto";
 }
 
 export function previewSymbol() {
-  this.innerHTML = isXTurn ? "X" : "O";
+  this.innerHTML = isPlayerTurn ? "X" : "";
   this.style.color = previewColor;
 }
 
@@ -41,7 +41,7 @@ export function hidePreviewSymbol() {
 }
 
 export function displayVictory(elts) {
-  if (isXTurn) {
+  if (isPlayerTurn) {
     let currentScore = Number(elts.xScoreElt.innerHTML);
     elts.xScoreElt.innerHTML = currentScore += 1;
   } else {
@@ -49,7 +49,7 @@ export function displayVictory(elts) {
     elts.oScoreElt.innerHTML = currentScore += 1;
   }
 
-  const winner = isXTurn ? "X" : "O";
+  const winner = isPlayerTurn ? "X" : "O";
   const message = `${winner} WINS!`;
 
   removePointerCursor(elts);
@@ -109,12 +109,12 @@ export function hideGameOverModal() {
 }
 
 export function changeTurn(elts) {
-  if (isXTurn) {
-    elts.isXTurnElt.setAttribute("class", "isActiveTurn activeRight");
+  if (isPlayerTurn) {
+    elts.isPlayerTurnElt.setAttribute("class", "isActiveTurn activeRight");
     elts.oTurnElt.setAttribute("class", "");
   } else {
     elts.oTurnElt.setAttribute("class", "isActiveTurn activeLeft");
-    elts.isXTurnElt.setAttribute("class", "");
+    elts.isPlayerTurnElt.setAttribute("class", "");
   }
 }
 

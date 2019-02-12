@@ -1,97 +1,111 @@
-import { gridValues, isXTurn } from "../index";
-import { findElements, playSymbol, changeTurn } from "../util/domUtils";
-import { getBoxDOMIndex } from "../util/utils";
+import {
+  getIndexOfEmptyBox,
+  isAboutToWin,
+  countItems,
+  playIndex
+} from "./utils";
+import { gridValues, isPlayerTurn } from "../index";
+import { findElements, changeTurn } from "../util/domUtils";
 
 export function playAI() {
-  console.log("CALLED");
-
   const elts = findElements();
 
-  AIShouldBlock();
-  function AIShouldBlock() {
-    // Block Row
+  const winningMovePosition = actOnWinningCondition("O");
+  const defeatMovePosition = actOnWinningCondition("X");
+
+  let position;
+
+  if (typeof winningMovePosition.row === "number") {
+    position = winningMovePosition;
+  } else if (typeof defeatMovePosition.row === "number") {
+    position = defeatMovePosition;
+  } else {
+    position = findRandomIndex(elts);
+  }
+
+  return playIndex(position, gridValues);
+
+  // Return position of move to play. If no move is found, return -1
+  function actOnWinningCondition(symbol) {
+    let position = -1;
+
     for (let i = 0; i < gridValues.length; i++) {
-      let move = getIndexOfEmptyBox(gridValues[i]);
+      const column = [gridValues[0][i], gridValues[1][i], gridValues[2][i]];
+      const leftCross = [
+        gridValues[0][i],
+        gridValues[1][i + 1],
+        gridValues[2][i + 2]
+      ];
+      const rightCross = [
+        gridValues[0][i + 2],
+        gridValues[1][i + 1],
+        gridValues[2][i]
+      ];
 
-      // Column move
-      if (!move.shouldBlock) {
-        const column = [
-          gridValues[i][0],
-          gridValues[i + 1][0],
-          gridValues[i + 2][0]
-        ];
-
-        move = getIndexOfEmptyBox(column);
+      // Check if AI should block a row
+      if (isAboutToWin(gridValues[i], symbol)) {
+        position = {
+          row: i,
+          col: getIndexOfEmptyBox(gridValues[i])
+        };
       }
-      // Cross move
-      if (!move.shouldBlock) {
-        const diagonal1 = [
-          gridValues[i][0],
-          gridValues[i + 1][1],
-          gridValues[i + 2][2]
-        ];
-
-        move = getIndexOfEmptyBox(diagonal1);
+      // Check if AI should block a column
+      else if (isAboutToWin(column, symbol)) {
+        position = {
+          row: getIndexOfEmptyBox(column),
+          col: i
+        };
       }
-
-      if (!move.shouldBlock) {
-        const diagonal2 = [
-          gridValues[i][2],
-          gridValues[i + 1][1],
-          gridValues[i + 2][0]
-        ];
-
-        move = getIndexOfEmptyBox(diagonal2);
+      // Check if AI should block a left cross
+      else if (isAboutToWin(leftCross, symbol)) {
+        position = {
+          row: getIndexOfEmptyBox(leftCross),
+          col: getIndexOfEmptyBox(leftCross)
+        };
       }
+      // Check if AI should block a right cross
+      else if (isAboutToWin(rightCross, symbol)) {
+        let col = 0;
 
-      if (move.shouldBlock) {
-        playSymbol(elts.boxes[move.index]);
-        gridValues[move.index] = "O";
-      } else {
-        const emptyGrid = [];
-        console.log("ELSE");
-        for (let row = 0; row < gridValues.length; row++) {
-          console.log("FIRST LOOP");
-          for (let col = 0; col < row; col++) {
-            console.log("SECOND LOOP");
-            console.log(gridValues[row][col]);
-            if (gridValues[row][col] === null) {
-              emptyGrid.push({ row, col });
-            }
-          }
+        // Convert the col to the right index
+        switch (getIndexOfEmptyBox(rightCross)) {
+          case 0:
+            col = 2;
+            break;
+          case 1:
+            col = 1;
+            break;
+          case 2:
+            col = 0;
+            break;
         }
 
-        const index = emptyGrid[Math.floor(Math.random() * emptyGrid.length)];
-
-        console.log(index);
-        console.table(emptyGrid);
-
-        playSymbol(elts.boxes[getBoxDOMIndex(index.row, index.col)]);
-        gridValues[index.row][index.col] = "O";
+        position = {
+          row: getIndexOfEmptyBox(rightCross),
+          col
+        };
       }
     }
+
+    return position;
   }
-}
 
-function countItems(list, lookup) {
-  let count = 0;
+  function actOnOffensive() {
+    // Go through all the possible move set:
+    // If
+  }
 
-  list.map(item => {
-    if (item === lookup) {
-      count++;
+  function findRandomIndex(elts) {
+    const emptyGrid = [];
+
+    for (let row = 0; row < gridValues.length; row++) {
+      for (let col = 0; col < gridValues.length; col++) {
+        if (gridValues[row][col] === null) {
+          emptyGrid.push({ row, col });
+        }
+      }
     }
-  });
 
-  return count;
-}
-
-function getIndexOfEmptyBox(arr) {
-  const numberOfMoves = countItems(arr);
-
-  if (numberOfMoves === arr.length - 1) {
-    // Returns the position to play
-    return { shouldBlock: true, index: arr.indexOf(null) };
-  } else {
-    return { shouldBlock: false, index: null };
+    return emptyGrid[Math.floor(Math.random() * emptyGrid.length)];
   }
 }

@@ -2,7 +2,7 @@ import { previewSymbol, hidePreviewSymbol } from "./domUtils";
 import { boxClick, reset } from "../index.js";
 
 // Add listeners to all box in the grid.
-export function addBoxesListeners(elts, isXTurn) {
+export function addBoxesListeners(elts, isPlayerTurn) {
   elts.boxes.forEach(box => {
     box.addEventListener("click", boxClick, false);
     box.addEventListener("mouseover", previewSymbol, false);

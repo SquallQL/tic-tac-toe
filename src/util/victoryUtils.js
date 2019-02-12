@@ -1,4 +1,25 @@
-export function isGameWon(gridValues) {
+import { displayVictory, displayDraw } from "./domUtils";
+import { removeBoxesListeners } from "./listenerUtils";
+
+export function isGameOver(gridValues) {
+  if (isGameWon(gridValues) || isGridFull(gridValues)) {
+    return true;
+  }
+
+  return false;
+}
+
+export function handleGameOver(gridValues, elts) {
+  if (isGameWon(gridValues)) {
+    displayVictory(elts);
+  } else if (isGridFull(gridValues)) {
+    displayDraw(elts);
+  }
+
+  removeBoxesListeners(elts);
+}
+
+function isGameWon(gridValues) {
   // If the grid is full and no other victory conditions are found,
   // it is a draw.
 
@@ -65,7 +86,7 @@ export function isGameWon(gridValues) {
   }
 }
 
-export function isGridFull(gridValues) {
+function isGridFull(gridValues) {
   let isGridFull = true;
 
   gridValues.forEach(row => {
