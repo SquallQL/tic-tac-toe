@@ -17,11 +17,14 @@ export function isAboutToWin(arr, symbol) {
   const numberOfMoves = countItems(arr, symbol);
   const numberOfEmptyBox = countItems(arr, null);
 
-  if (numberOfMoves === arr.length - 1 && numberOfEmptyBox === 1) {
-    return true;
-  } else {
-    return false;
-  }
+  return numberOfMoves === arr.length - 1 && numberOfEmptyBox === 1;
+}
+
+export function hasPotentialVictory(arr, symbol){
+    const numberOfMoves = countItems(arr, symbol);
+    const numberOfEmptyBox = countItems(arr, null);
+    
+    return numberOfMoves === 1 && numberOfEmptyBox === 2    
 }
 
 export function getIndexOfEmptyBox(arr) {

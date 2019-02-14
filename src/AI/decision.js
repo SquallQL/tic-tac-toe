@@ -1,6 +1,7 @@
 import {
   getIndexOfEmptyBox,
   isAboutToWin,
+  hasPotentialVictory,
   countItems,
   playIndex
 } from "./utils";
@@ -10,15 +11,20 @@ import { findElements, changeTurn } from "../util/domUtils";
 export function playAI() {
   const elts = findElements();
 
-  const winningMovePosition = actOnWinningCondition("O");
-  const defeatMovePosition = actOnWinningCondition("X");
+  const offensiveMovePosition = actOnOffensive("O");
+  const defensiveMovePosition = actOnOffensive("X");
+
+  console.log(offensiveMovePosition);
+  console.log(defensiveMovePosition);
 
   let position;
 
-  if (typeof winningMovePosition.row === "number") {
-    position = winningMovePosition;
-  } else if (typeof defeatMovePosition.row === "number") {
-    position = defeatMovePosition;
+  if (typeof offensiveMovePosition.winningMove.row === "number") {
+    position = offensiveMovePosition.winningMove;
+  } else if (typeof defensiveMovePosition.winningMove.row === "number") {
+    position = defensiveMovePosition.winningMove;
+  } else if (typeof offensiveMovePosition.offsensiveMove.row === "number") {
+    position = offensiveMovePosition.offsensiveMove;
   } else {
     position = findRandomIndex(elts);
   }
@@ -26,8 +32,8 @@ export function playAI() {
   return playIndex(position, gridValues);
 
   // Return position of move to play. If no move is found, return -1
-  function actOnWinningCondition(symbol) {
-    let position = -1;
+  function actOnOffensive(symbol) {
+    const possibleMoves = [];
 
     for (let i = 0; i < gridValues.length; i++) {
       const column = [gridValues[0][i], gridValues[1][i], gridValues[2][i]];
@@ -43,28 +49,43 @@ export function playAI() {
       ];
 
       // Check if AI should block a row
-      if (isAboutToWin(gridValues[i], symbol)) {
-        position = {
+      if (
+        isAboutToWin(gridValues[i], symbol) ||
+        hasPotentialVictory(gridValues[i], symbol)
+      ) {
+        possibleMoves.push({
           row: i,
-          col: getIndexOfEmptyBox(gridValues[i])
-        };
+          col: getIndexOfEmptyBox(gridValues[i]),
+          isWinningMove: isAboutToWin(gridValues[i], symbol)
+        });
       }
       // Check if AI should block a column
-      else if (isAboutToWin(column, symbol)) {
-        position = {
+      if (
+        isAboutToWin(column, symbol) ||
+        hasPotentialVictory(column, symbol)
+      ) {
+        possibleMoves.push({
           row: getIndexOfEmptyBox(column),
-          col: i
-        };
+          col: i,
+          isWinningMove: isAboutToWin(column, symbol)
+        });
       }
       // Check if AI should block a left cross
-      else if (isAboutToWin(leftCross, symbol)) {
-        position = {
+      if (
+        isAboutToWin(leftCross, symbol) ||
+        hasPotentialVictory(leftCross, symbol)
+      ) {
+        possibleMoves.push({
           row: getIndexOfEmptyBox(leftCross),
-          col: getIndexOfEmptyBox(leftCross)
-        };
+          col: getIndexOfEmptyBox(leftCross),
+          isWinningMove: isAboutToWin(leftCross, symbol)
+        });
       }
       // Check if AI should block a right cross
-      else if (isAboutToWin(rightCross, symbol)) {
+      if (
+        isAboutToWin(rightCross, symbol) ||
+        hasPotentialVictory(rightCross, symbol)
+      ) {
         let col = 0;
 
         // Convert the col to the right index
@@ -80,19 +101,30 @@ export function playAI() {
             break;
         }
 
-        position = {
+        possibleMoves.push({
           row: getIndexOfEmptyBox(rightCross),
-          col
-        };
+          col,
+          isWinningMove: isAboutToWin(rightCross, symbol)
+        });
       }
     }
 
-    return position;
-  }
+    function findWinningMove(moves) {
+      let winningMove;
 
-  function actOnOffensive() {
-    // Go through all the possible move set:
-    // If
+      moves.forEach(move => {
+        if (move.isWinningMove) {
+          winningMove = move;
+        }
+      });
+
+      return winningMove ? winningMove : {};
+    }
+
+    return {
+      winningMove: findWinningMove(possibleMoves),
+      offsensiveMove: possibleMoves[0] || {}
+    };
   }
 
   function findRandomIndex(elts) {
