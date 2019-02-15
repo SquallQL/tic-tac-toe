@@ -1,4 +1,4 @@
-import { playAI } from "./AI/decision";
+import { playAI } from "./AI/index";
 
 import {
   findElements,
@@ -10,6 +10,16 @@ import {
   hideGameOverModal
 } from "./util/domUtils";
 import {
+  getGridValues,
+  setGridValue,
+  resetGridValues,
+  getIsPlayerTurn,
+  toggleIsPlayerTurn,
+  setIsPlayerTurn,
+  getIsPlayerStarting,
+  toggleIsPlayerStarting
+} from "./state/state";
+import {
   addBoxesListeners,
   removeBoxesListeners,
   removeBoxListener
@@ -17,23 +27,22 @@ import {
 import { getBoxPosition, isBoxEmpty } from "./util/utils";
 import { isGameOver, handleGameOver } from "./util/victoryUtils";
 
-// TODO: Handle Global state privately
-export let gridValues = [
-  [null, null, null],
-  [null, null, null],
-  [null, null, null]
-];
-export let isPlayerTurn = true;
-
-// Call after the onload event from the dom to start the program
 export function run() {
   const elts = findElements();
   addBoxesListeners(elts);
+
+  const isPlayerStarting = getIsPlayerStarting();
+
+  if (!isPlayerStarting) {
+    playAI();
+  }
 }
 
 // Function that handle updating the grid when a click was received
 export function boxClick() {
   const elts = findElements();
+  const gridValues = getGridValues();
+  const isPlayerTurn = getIsPlayerTurn();
 
   const { row, col } = getBoxPosition(this);
   const currentBox = gridValues[row][col];
@@ -41,7 +50,7 @@ export function boxClick() {
   if (isBoxEmpty(currentBox)) {
     if (isPlayerTurn) {
       playSymbol(this);
-      gridValues[row][col] = "X";
+      setGridValue(row, col, "X");
     } else {
       return;
     }
@@ -52,33 +61,27 @@ export function boxClick() {
     handleGameOver(gridValues, elts);
   } else {
     removeBoxListener(this);
-    isPlayerTurn = !isPlayerTurn;
-    changeTurn(elts);
 
-    // Play AI and check if AI has won before changing turn
-    setTimeout(() => {
-      const AIBoxIndex = playAI();
+    toggleIsPlayerTurn();
+    changeTurn(elts, isPlayerTurn);
 
-      if (isGameOver(gridValues)) {
-        handleGameOver(gridValues, elts);
-      } else {
-        isPlayerTurn = !isPlayerTurn;
-        changeTurn(elts);
-        removeBoxListener(elts.boxes[AIBoxIndex]);
-      }
-    }, 1000);
+    playAI();
   }
 }
 
 export function reset() {
   const elts = findElements();
 
-  isPlayerTurn = true;
-  gridValues = [[null, null, null], [null, null, null], [null, null, null]];
+  toggleIsPlayerStarting();
+
+  const isPlayerStarting = getIsPlayerStarting();
+  setIsPlayerTurn(isPlayerStarting);
+
+  resetGridValues();
   hideGameOverModal();
   resetDOM(elts);
   // Reset the turn status to X
-  changeTurn(elts, true);
+  changeTurn(elts, isPlayerStarting);
 
   // Restart the game
   run();

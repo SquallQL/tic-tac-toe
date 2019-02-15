@@ -7,7 +7,8 @@ import {
   hiddenColor,
   fadeOutBackground
 } from "../settings/colorConstants";
-import { run, reset, isPlayerTurn } from "../index";
+import { run, reset } from "../index";
+import { getIsPlayerTurn } from "../state/state";
 import { isBoxEmpty, updateGrid } from "./utils";
 import { addResetBtnListeners, removeResetBtnListeners } from "./listenerUtils";
 
@@ -26,12 +27,16 @@ export function findElements() {
 }
 
 export function playSymbol(box) {
+  const isPlayerTurn = getIsPlayerTurn();
+
   box.innerHTML = isPlayerTurn ? "X" : "O";
   box.style.color = isPlayerTurn ? xColor : oColor;
   box.style.cursor = "auto";
 }
 
 export function previewSymbol() {
+  const isPlayerTurn = getIsPlayerTurn();
+
   this.innerHTML = isPlayerTurn ? "X" : "";
   this.style.color = previewColor;
 }
@@ -41,6 +46,8 @@ export function hidePreviewSymbol() {
 }
 
 export function displayVictory(elts) {
+  const isPlayerTurn = getIsPlayerTurn();
+
   if (isPlayerTurn) {
     let currentScore = Number(elts.xScoreElt.innerHTML);
     elts.xScoreElt.innerHTML = currentScore += 1;
@@ -105,10 +112,11 @@ export function showGameOverModal(message, winner) {
 export function hideGameOverModal() {
   const root = document.querySelector("#root");
   const takeOver = document.querySelector("#gameOver");
+
   root.removeChild(takeOver);
 }
 
-export function changeTurn(elts) {
+export function changeTurn(elts, isPlayerTurn) {
   if (isPlayerTurn) {
     elts.isPlayerTurnElt.setAttribute("class", "isActiveTurn activeRight");
     elts.oTurnElt.setAttribute("class", "");
@@ -121,6 +129,7 @@ export function changeTurn(elts) {
 export function resetDOM(elts) {
   // Increment the round count by 1
   let round = Number(elts.roundNumber.innerHTML) + 1;
+
   elts.roundNumber.innerHTML = round;
   elts.roundNumber.setAttribute("class", "");
   elts.gameStatusElt.innerHTML = "Round ";

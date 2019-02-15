@@ -26,6 +26,37 @@ export function getBoxDOMIndex(row, col) {
   }
 }
 
+export function getIndexOfEmptyBox(arr) {
+  return arr.indexOf(null);
+}
+
 export function isBoxEmpty(box) {
   return box === null;
 }
+
+export function countItems(list, lookup) {
+  let count = 0;
+
+  list.map(item => {
+    if (item === lookup) {
+      count++;
+    }
+  });
+
+  return count;
+}
+export function getRandomGridIndex(elts, gridValues) {
+  const emptyGrid = [];
+
+  for (let row = 0; row < gridValues.length; row++) {
+    for (let col = 0; col < gridValues.length; col++) {
+      if (gridValues[row][col] === null) {
+        emptyGrid.push({ row, col });
+      }
+    }
+  }
+
+  return emptyGrid[Math.floor(Math.random() * emptyGrid.length)];
+}
+
+
