@@ -27,6 +27,9 @@ import {
 import { getBoxPosition, isBoxEmpty } from "./util/utils";
 import { isGameOver, handleGameOver } from "./util/victoryUtils";
 
+// Import style for the bundle
+import "../css/index.css";
+
 export function run() {
   const elts = findElements();
   addBoxesListeners(elts);
